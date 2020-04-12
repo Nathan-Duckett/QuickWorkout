@@ -10,6 +10,6 @@ import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
 public class CoreExercise extends AbstractWorkout {
     @Override
     protected String getFileName() {
-        return "exercises/core.txt";
+        return "exercises/core.csv";
     }
 }

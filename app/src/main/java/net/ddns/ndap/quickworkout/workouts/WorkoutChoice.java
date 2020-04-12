@@ -8,10 +8,10 @@ import net.ddns.ndap.quickworkout.model.Workout;
  * @author Nathan Duckett
  */
 public interface WorkoutChoice {
-
     /**
      * Get a random workout from the possible choices of this type.
-     * @return
+     *
+     * @return Workout from the list of workouts.
      */
     Workout getRandom();
 }

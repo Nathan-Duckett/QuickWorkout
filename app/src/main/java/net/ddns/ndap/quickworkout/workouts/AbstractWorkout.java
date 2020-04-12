@@ -2,6 +2,11 @@ package net.ddns.ndap.quickworkout.workouts;
 
 import net.ddns.ndap.quickworkout.model.Workout;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +25,7 @@ public abstract class AbstractWorkout implements WorkoutChoice {
      */
     public AbstractWorkout() {
         this.workoutList = new ArrayList<>();
+        loadExerciseContents();
     }
 
     /**
@@ -69,4 +75,17 @@ public abstract class AbstractWorkout implements WorkoutChoice {
      * @return String filename for the contents of the Exercise.
      */
     protected abstract String getFileName();
+
+    /**
+     * Load the exercises contents from the corresponding file.
+     */
+    private void loadExerciseContents() {
+        File file = new File(getFileName());
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            br.lines();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

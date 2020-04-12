@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Abstract representation of a Workout. Basic implementation of required methods which are
@@ -83,7 +84,18 @@ public abstract class AbstractWorkout implements WorkoutChoice {
         File file = new File(getFileName());
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            br.lines();
+            br.lines().forEach(s -> {
+                Scanner sc = new Scanner(s);
+                sc.useDelimiter(",");
+
+                // Assuming default structure "name,time,description,image_path"
+                String name = sc.next();
+                long time = sc.nextLong();
+                String desc = sc.next();
+                String imagePath = sc.next();
+                addWorkout(new Workout(name, time, desc, imagePath));
+                sc.close();
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

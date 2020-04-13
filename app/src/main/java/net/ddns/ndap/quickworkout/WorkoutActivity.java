@@ -86,6 +86,11 @@ public class WorkoutActivity extends AppCompatActivity {
      * Set the exercise which is supposed to be performed next.
      */
     private void setExercise() {
+        // Check if timer was running already first
+        if (timerRunning) {
+            stopTimer();
+        }
+
         Workout lastChoice = this.choice;
         if (this.choice != null) {
             // Keep changing as long as exercise isn't the same.

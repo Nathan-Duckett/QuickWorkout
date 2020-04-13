@@ -1,5 +1,7 @@
 package net.ddns.ndap.quickworkout.workouts.exercises;
 
+import android.content.Context;
+
 import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
 
 /**
@@ -8,8 +10,17 @@ import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
  * @author Nathan Duckett
  */
 public class CoreExercise extends AbstractWorkout {
+    /**
+     * Create a new CoreExercise instance.
+     *
+     * @param context Context from Android Application.
+     */
+    public CoreExercise(Context context) {
+        super(context);
+    }
+
     @Override
     protected String getFileName() {
-        return "exercises/core.csv";
+        return "core.csv";
     }
 }

@@ -1,5 +1,7 @@
 package net.ddns.ndap.quickworkout.workouts;
 
+import android.content.Context;
+
 import net.ddns.ndap.quickworkout.model.Workout;
 
 import java.io.BufferedReader;
@@ -7,6 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -20,13 +25,15 @@ import java.util.Scanner;
  */
 public abstract class AbstractWorkout implements WorkoutChoice {
     private List<Workout> workoutList;
+    private Context context;
 
     /**
      * Create a new AbstractWorkout instance.
      */
-    public AbstractWorkout() {
+    public AbstractWorkout(Context context) {
         this.workoutList = new ArrayList<>();
-        loadExerciseContents();
+        this.context = context;
+        loadContents();
     }
 
     /**
@@ -78,12 +85,45 @@ public abstract class AbstractWorkout implements WorkoutChoice {
     protected abstract String getFileName();
 
     /**
+     * Create a file stream from the file within assets.
+     *
+     * @return InputStream opened from the corresponding file.
+     * @throws IOException Thrown due to file issues.
+     */
+    private InputStream openFileStream() throws IOException {
+        return context.getAssets().open("exercises/" + getFileName());
+    }
+
+    /**
+     * Build file name from root - Mainly for testing purposes.
+     *
+     * @return String built filename to the exercise file.
+     */
+    private String buildFileName() {
+        return "src/main/assets/exercises/" + getFileName();
+    }
+
+    /**
+     * Load the corresponding exercise contents from the files. Location is based on whether
+     * this has context or not.
+     */
+    private void loadContents() {
+        try {
+            if (this.context == null) {
+                loadExerciseContents(new FileReader(new File(buildFileName())));
+            } else {
+                loadExerciseContents(new InputStreamReader(openFileStream()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * Load the exercises contents from the corresponding file.
      */
-    private void loadExerciseContents() {
-        File file = new File(getFileName());
-
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+    private void loadExerciseContents(Reader reader) {
+        try (BufferedReader br = new BufferedReader(reader)) {
             br.lines().forEach(s -> {
                 Scanner sc = new Scanner(s);
                 sc.useDelimiter(",");

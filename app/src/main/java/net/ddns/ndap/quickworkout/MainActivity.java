@@ -2,18 +2,32 @@ package net.ddns.ndap.quickworkout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import net.ddns.ndap.quickworkout.model.Workout;
+import net.ddns.ndap.quickworkout.workouts.WorkoutChoice;
+import net.ddns.ndap.quickworkout.workouts.exercises.CoreExercise;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button runButton = findViewById(R.id.runButton);
+        runButton.setOnClickListener(this::startWorkout);
     }
 
-    public void chooseWorkout(View view) {
-        setContentView(R.layout.activity_in_progress);
+    private void startWorkout(View view) {
+        if (view.getId() == R.id.runButton) {
+            Intent intent = new Intent(this, WorkoutActivity.class);
+
+            this.startActivity(intent);
+        }
     }
 }

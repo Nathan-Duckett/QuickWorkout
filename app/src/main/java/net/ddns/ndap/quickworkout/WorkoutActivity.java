@@ -2,6 +2,7 @@ package net.ddns.ndap.quickworkout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -12,6 +13,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import net.ddns.ndap.quickworkout.model.Workout;
+import net.ddns.ndap.quickworkout.util.ExerciseLoader;
+import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
 import net.ddns.ndap.quickworkout.workouts.WorkoutChoice;
 import net.ddns.ndap.quickworkout.workouts.exercises.CoreExercise;
 
@@ -30,7 +33,10 @@ public class WorkoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_progress);
-        this.exercises = new CoreExercise(getApplication().getApplicationContext());
+        Context appContext = getApplication().getApplicationContext();
+        this.exercises = new CoreExercise();
+
+        new ExerciseLoader(appContext, this.exercises);
 
         exerciseNameField = findViewById(R.id.ExerciseName);
 

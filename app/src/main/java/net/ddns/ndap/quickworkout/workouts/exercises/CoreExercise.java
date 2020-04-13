@@ -10,17 +10,8 @@ import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
  * @author Nathan Duckett
  */
 public class CoreExercise extends AbstractWorkout {
-    /**
-     * Create a new CoreExercise instance.
-     *
-     * @param context Context from Android Application.
-     */
-    public CoreExercise(Context context) {
-        super(context);
-    }
-
     @Override
-    protected String getFileName() {
+    public String getFileName() {
         return "core.csv";
     }
 }

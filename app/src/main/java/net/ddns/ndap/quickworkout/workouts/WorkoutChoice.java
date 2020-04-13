@@ -14,4 +14,18 @@ public interface WorkoutChoice {
      * @return Workout from the list of workouts.
      */
     Workout getRandom();
+
+    /**
+     * Get the filename of contents to load for this Exercise.
+     *
+     * @return String filename for the contents of the Exercise.
+     */
+    String getFileName();
+
+    /**
+     * Add a workout into the workout list.
+     *
+     * @param workout Workout to be added to the list.
+     */
+    void addWorkout(Workout workout);
 }

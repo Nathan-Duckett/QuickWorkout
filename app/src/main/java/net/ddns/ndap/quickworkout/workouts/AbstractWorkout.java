@@ -25,22 +25,16 @@ import java.util.Scanner;
  */
 public abstract class AbstractWorkout implements WorkoutChoice {
     private List<Workout> workoutList;
-    private Context context;
+
 
     /**
      * Create a new AbstractWorkout instance.
      */
-    public AbstractWorkout(Context context) {
+    public AbstractWorkout() {
         this.workoutList = new ArrayList<>();
-        this.context = context;
-        loadContents();
     }
 
-    /**
-     * Add a workout into the workout list.
-     *
-     * @param workout Workout to be added to the list.
-     */
+    @Override
     public void addWorkout(Workout workout) {
         if (workout == null) {
             throw new IllegalArgumentException("Workout provided was null");
@@ -75,69 +69,5 @@ public abstract class AbstractWorkout implements WorkoutChoice {
      */
     public int getNumberOfWorkouts() {
         return this.workoutList.size();
-    }
-
-    /**
-     * Get the filename of contents to load for this Exercise.
-     *
-     * @return String filename for the contents of the Exercise.
-     */
-    protected abstract String getFileName();
-
-    /**
-     * Create a file stream from the file within assets.
-     *
-     * @return InputStream opened from the corresponding file.
-     * @throws IOException Thrown due to file issues.
-     */
-    private InputStream openFileStream() throws IOException {
-        return context.getAssets().open("exercises/" + getFileName());
-    }
-
-    /**
-     * Build file name from root - Mainly for testing purposes.
-     *
-     * @return String built filename to the exercise file.
-     */
-    private String buildFileName() {
-        return "src/main/assets/exercises/" + getFileName();
-    }
-
-    /**
-     * Load the corresponding exercise contents from the files. Location is based on whether
-     * this has context or not.
-     */
-    private void loadContents() {
-        try {
-            if (this.context == null) {
-                loadExerciseContents(new FileReader(new File(buildFileName())));
-            } else {
-                loadExerciseContents(new InputStreamReader(openFileStream()));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Load the exercises contents from the corresponding file.
-     */
-    private void loadExerciseContents(Reader reader) {
-        try (BufferedReader br = new BufferedReader(reader)) {
-            br.lines().forEach(s -> {
-                Scanner sc = new Scanner(s);
-                sc.useDelimiter(",");
-
-                // Assuming default structure "name,time,description,image_path"
-                String name = sc.next();
-                long time = sc.nextLong();
-                String desc = sc.next();
-                String imagePath = sc.next();
-                addWorkout(new Workout(name, time, desc, imagePath));
-                sc.close();
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

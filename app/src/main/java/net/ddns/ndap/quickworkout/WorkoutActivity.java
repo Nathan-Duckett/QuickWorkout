@@ -3,6 +3,7 @@ package net.ddns.ndap.quickworkout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import net.ddns.ndap.quickworkout.util.ExerciseLoader;
 import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
 import net.ddns.ndap.quickworkout.workouts.WorkoutChoice;
 import net.ddns.ndap.quickworkout.workouts.exercises.CoreExercise;
+import net.ddns.ndap.quickworkout.workouts.exercises.StretchExercise;
 
 public class WorkoutActivity extends AppCompatActivity {
     private WorkoutChoice exercises;
@@ -34,13 +36,13 @@ public class WorkoutActivity extends AppCompatActivity {
         // Create view in android mode
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_progress);
-        Context appContext = getApplication().getApplicationContext();
 
         // Dynamically generate which exercises should be displayed
-        this.exercises = new CoreExercise();
-
-        // Populate the class with content.
-        ExerciseLoader.load(appContext, this.exercises);
+        Intent intent = getIntent();
+        String intentExtra = "WORKOUT_TYPE";
+        if (intent.hasExtra(intentExtra)) {
+            initExercises(intent.getStringExtra(intentExtra));
+        }
 
         exerciseNameField = findViewById(R.id.ExerciseName);
 
@@ -58,6 +60,31 @@ public class WorkoutActivity extends AppCompatActivity {
         setExercise();
     }
 
+    /**
+     * Initialize the exercises for this activity.
+     *
+     * @param workoutType Passed intent workout_type when creating this activity.
+     */
+    private void initExercises(String workoutType) {
+        if (workoutType == null) {
+            throw new NullPointerException("Intent workout type was null");
+        }
+
+        switch (workoutType) {
+            case "STRETCH":
+                this.exercises = new StretchExercise();
+                break;
+            case "CORE":
+                this.exercises = new CoreExercise();
+        }
+
+        // Populate the class with content.
+        ExerciseLoader.load(getApplicationContext(), this.exercises);
+    }
+
+    /**
+     * Set the exercise which is supposed to be performed next.
+     */
     private void setExercise() {
         Workout lastChoice = this.choice;
         if (this.choice != null) {
@@ -77,6 +104,9 @@ public class WorkoutActivity extends AppCompatActivity {
         countdownButton.setText(R.string.timer_button);
     }
 
+    /**
+     * StartStop is set for controlling the timer to enable/disable it.
+     */
     private void startStop() {
         if (timerRunning) {
             stopTimer();
@@ -85,12 +115,18 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handle stopping the timer after a button press.
+     */
     private void stopTimer() {
         countDownTimer.cancel();
         countdownButton.setText(R.string.timer_button);
         timerRunning = false;
     }
 
+    /**
+     * Handle creating a timer/starting a timer.
+     */
     private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
             @Override
@@ -117,6 +153,9 @@ public class WorkoutActivity extends AppCompatActivity {
         timerRunning = true;
     }
 
+    /**
+     * Handle updating the timer with the new value of remaining time.
+     */
     private void updateTimer() {
         int minutes = (int) timeLeftInMilliseconds / 60000; // Convert millis to minutes
         int seconds = (int) timeLeftInMilliseconds % 60000 / 1000; // Remainder above - Times 1000x from milli to seconds.

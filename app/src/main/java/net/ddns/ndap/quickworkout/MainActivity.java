@@ -20,8 +20,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button runButton = findViewById(R.id.core_button);
-        runButton.setOnClickListener(this::startWorkout);
+        Button coreButton = findViewById(R.id.core_button);
+        coreButton.setOnClickListener(this::startWorkout);
+
+        Button stretchButton = findViewById(R.id.stretches_button);
+        stretchButton.setOnClickListener(this::startWorkout);
 
         // Set dark mode by default
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -29,9 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void startWorkout(View view) {
         if (view.getId() == R.id.core_button) {
-            Intent intent = new Intent(this, WorkoutActivity.class);
-
-            this.startActivity(intent);
+            changeToWorkout("CORE");
+        } else if (view.getId() == R.id.stretches_button) {
+            changeToWorkout("STRETCH");
         }
+    }
+
+    private void changeToWorkout(String workoutType) {
+        Intent intent = new Intent(this, WorkoutActivity.class);
+        intent.putExtra("WORKOUT_TYPE", workoutType);
+
+        this.startActivity(intent);
     }
 }

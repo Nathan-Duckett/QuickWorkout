@@ -5,4 +5,5 @@
     <string name="core_button">Core</string>
     <string name="timer_button">START</string>
     <string name="stretches_button">Stretches</string>
+    <string name="description_button">Description</string>
 </resources>

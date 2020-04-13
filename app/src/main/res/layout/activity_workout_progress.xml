@@ -17,6 +17,7 @@
         tools:text="Sit Up" />
 
     <RelativeLayout
+        android:id="@+id/time_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -39,6 +40,17 @@
             android:textSize="24sp"/>
 
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/description_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="25sp"
+        android:layout_above="@id/workout_next_button"
+        android:layout_below="@id/time_box"
+        android:layout_centerHorizontal="true"
+        android:text="@string/description_button"
+        tools:text="@string/description_button" />
 
     <Button
         android:id="@+id/workout_next_button"

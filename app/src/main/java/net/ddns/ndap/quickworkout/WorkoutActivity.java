@@ -57,6 +57,10 @@ public class WorkoutActivity extends AppCompatActivity {
             setExercise();
         });
 
+        findViewById(R.id.description_button).setOnClickListener(view1 -> {
+            toggleDescriptionPopUp();
+        });
+
         setExercise();
     }
 
@@ -171,5 +175,15 @@ public class WorkoutActivity extends AppCompatActivity {
         timeLeftText += seconds;
 
         countdownText.setText(timeLeftText);
+    }
+
+    /**
+     * Toggle a popup to display the description of the Workout.
+     */
+    private void toggleDescriptionPopUp() {
+        String desc = this.choice.getDescription();
+        Intent intent = new Intent(this, DescriptionActivity.class);
+        intent.putExtra("WORKOUT_DESC", desc);
+        startActivity(intent);
     }
 }

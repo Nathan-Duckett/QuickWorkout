@@ -19,6 +19,7 @@
         <activity android:name=".WorkoutActivity"
             android:label="Workout Task">
         </activity>
+        <activity android:name=".DescriptionActivity" android:theme="@style/AppTheme.PopUp" />
     </application>
 
 </manifest>

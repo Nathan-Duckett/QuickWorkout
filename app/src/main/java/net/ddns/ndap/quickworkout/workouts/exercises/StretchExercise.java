@@ -12,6 +12,6 @@ import net.ddns.ndap.quickworkout.workouts.AbstractWorkout;
 public class StretchExercise extends AbstractWorkout {
     @Override
     public String getFileName() {
-        return "exercises/stretch.csv";
+        return "stretch.csv";
     }
 }

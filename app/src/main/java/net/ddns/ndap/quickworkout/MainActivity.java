@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button runButton = findViewById(R.id.runButton);
+        Button runButton = findViewById(R.id.core_button);
         runButton.setOnClickListener(this::startWorkout);
 
         // Set dark mode by default
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startWorkout(View view) {
-        if (view.getId() == R.id.runButton) {
+        if (view.getId() == R.id.core_button) {
             Intent intent = new Intent(this, WorkoutActivity.class);
 
             this.startActivity(intent);

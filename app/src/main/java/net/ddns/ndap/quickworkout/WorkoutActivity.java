@@ -77,7 +77,7 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void stopTimer() {
         countDownTimer.cancel();
-        countdownButton.setText("START");
+        countdownButton.setText(R.string.timer_button);
         timerRunning = false;
     }
 

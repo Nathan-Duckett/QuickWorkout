@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">QuickWorkout</string>
+    <string name="main_title">Choose your Workout:</string>
     <string name="workout_next_button">Next Workout</string>
-    <string name="runButton">Choose Workout</string>
+    <string name="core_button">Core</string>
     <string name="timer_button">START</string>
+    <string name="stretches_button">Stretches</string>
 </resources>

@@ -23,51 +23,19 @@ import java.util.Scanner;
  * @author Nathan Duckett
  */
 public class ExerciseLoader {
-    private Context context;
-    private WorkoutChoice workout;
-
     /**
-     * Create a new ExerciseLoader. This will take the application context and load the corresponding
-     * data into the provided workout instance.
+     * Populate the workout with the required data from the assets folder. Automatically loads,
+     * parses and sets the values within the Workout.
      *
-     * @param context Application context.
-     * @param workout Workout to have its' data loaded.
+     * @param appContext Android app context - access to assets folder.
+     * @param workout Workout to populate the data with.
      */
-    public ExerciseLoader(Context context, WorkoutChoice workout) {
-        this.context = context;
-        this.workout = workout;
-        loadContents();
-    }
-
-    /**
-     * Create a file stream from the file within assets.
-     *
-     * @return InputStream opened from the corresponding file.
-     * @throws IOException Thrown due to file issues.
-     */
-    private InputStream openFileStream() throws IOException {
-        return context.getAssets().open("exercises/" + workout.getFileName());
-    }
-
-    /**
-     * Build file name from root - Mainly for testing purposes.
-     *
-     * @return String built filename to the exercise file.
-     */
-    private String buildFileName() {
-        return "src/main/assets/exercises/" + workout.getFileName();
-    }
-
-    /**
-     * Load the corresponding exercise contents from the files. Location is based on whether
-     * this has context or not.
-     */
-    private void loadContents() {
+    public static void load(Context appContext, WorkoutChoice workout) {
         try {
-            if (this.context == null) {
-                loadExerciseContents(new FileReader(new File(buildFileName())));
+            if (appContext == null) {
+                loadExerciseContents(workout, new FileReader(new File(buildFileName(workout))));
             } else {
-                loadExerciseContents(new InputStreamReader(openFileStream()));
+                loadExerciseContents(workout, new InputStreamReader(openFileStream(appContext, workout)));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,9 +43,34 @@ public class ExerciseLoader {
     }
 
     /**
-     * Load the exercises contents from the corresponding file.
+     * Create a file stream from the file within assets.
+     *
+     * @param context Android app context.
+     * @param workout Workout to retrieve the expected filename from.
+     * @return InputStream opened from the corresponding file.
+     * @throws IOException Thrown due to file issues.
      */
-    private void loadExerciseContents(Reader reader) {
+    private static InputStream openFileStream(Context context, WorkoutChoice workout) throws IOException {
+        return context.getAssets().open("exercises/" + workout.getFileName());
+    }
+
+    /**
+     * Build file name from root - Mainly for testing purposes.
+     *
+     * @param workout Workout to retrieve the expected filename from.
+     * @return String built filename to the exercise file.
+     */
+    private static String buildFileName(WorkoutChoice workout) {
+        return "src/main/assets/exercises/" + workout.getFileName();
+    }
+
+    /**
+     * Load the exercises contents from the corresponding file.
+     *
+     * @param workout Workout to populate with the data from the reader.
+     * @param reader Reader containing the data ready to parse from the file.
+     */
+    private static void loadExerciseContents(WorkoutChoice workout, Reader reader) {
         try (BufferedReader br = new BufferedReader(reader)) {
             br.lines().forEach(s -> {
                 Scanner sc = new Scanner(s);

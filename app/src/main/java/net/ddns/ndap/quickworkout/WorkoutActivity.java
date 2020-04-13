@@ -31,12 +31,16 @@ public class WorkoutActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Create view in android mode
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_workout_progress);
         Context appContext = getApplication().getApplicationContext();
+
+        // Dynamically generate which exercises should be displayed
         this.exercises = new CoreExercise();
 
-        new ExerciseLoader(appContext, this.exercises);
+        // Populate the class with content.
+        ExerciseLoader.load(appContext, this.exercises);
 
         exerciseNameField = findViewById(R.id.ExerciseName);
 

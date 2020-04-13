@@ -2,6 +2,9 @@ package net.ddns.ndap.quickworkout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -13,8 +16,10 @@ import net.ddns.ndap.quickworkout.workouts.WorkoutChoice;
 import net.ddns.ndap.quickworkout.workouts.exercises.CoreExercise;
 
 public class WorkoutActivity extends AppCompatActivity {
-    private WorkoutChoice coreExercises;
+    private WorkoutChoice exercises;
+    private Workout choice;
     private TextView countdownText;
+    private TextView exerciseNameField;
     private Button countdownButton;
 
     private CountDownTimer countDownTimer;
@@ -24,14 +29,11 @@ public class WorkoutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_in_progress);
-        this.coreExercises = new CoreExercise(getApplication().getApplicationContext());
+        setContentView(R.layout.activity_workout_progress);
+        this.exercises = new CoreExercise(getApplication().getApplicationContext());
 
-        Workout choice = coreExercises.getRandom();
-        System.out.println(choice);
-        timeLeftInMilliseconds = choice.getTime() * 1000;
-        TextView exerciseNameField = findViewById(R.id.ExerciseName);
-        exerciseNameField.setText(choice.getName());
+        exerciseNameField = findViewById(R.id.ExerciseName);
+
         countdownText = findViewById(R.id.countdown_text);
         countdownButton = findViewById(R.id.countdown_button);
 
@@ -39,12 +41,33 @@ public class WorkoutActivity extends AppCompatActivity {
             startStop();
         });
 
-        countdownButton.setText("START");
+        findViewById(R.id.workout_next_button).setOnClickListener(view1 -> {
+            setExercise();
+        });
 
-        updateTimer();
+        setExercise();
     }
 
-    public void startStop() {
+    private void setExercise() {
+        Workout lastChoice = this.choice;
+        if (this.choice != null) {
+            // Keep changing as long as exercise isn't the same.
+            while (lastChoice.equals(this.choice)) {
+                this.choice = exercises.getRandom();
+            }
+        } else {
+            this.choice = exercises.getRandom();
+        }
+        timeLeftInMilliseconds = choice.getTime() * 1000;
+
+        exerciseNameField.setText(choice.getName());
+        updateTimer();
+
+        countdownButton.setVisibility(View.VISIBLE);
+        countdownButton.setText(R.string.timer_button);
+    }
+
+    private void startStop() {
         if (timerRunning) {
             stopTimer();
         } else {
@@ -52,13 +75,13 @@ public class WorkoutActivity extends AppCompatActivity {
         }
     }
 
-    public void stopTimer() {
+    private void stopTimer() {
         countDownTimer.cancel();
         countdownButton.setText("START");
         timerRunning = false;
     }
 
-    public void startTimer() {
+    private void startTimer() {
         countDownTimer = new CountDownTimer(timeLeftInMilliseconds, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -68,7 +91,15 @@ public class WorkoutActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-
+                try {
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
+                    timerRunning = false;
+                    countdownButton.setVisibility(View.GONE);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }.start();
 

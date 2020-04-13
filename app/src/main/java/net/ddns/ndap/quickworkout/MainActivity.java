@@ -1,6 +1,7 @@
 package net.ddns.ndap.quickworkout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button runButton = findViewById(R.id.runButton);
         runButton.setOnClickListener(this::startWorkout);
+
+        // Set dark mode by default
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
     }
 
     private void startWorkout(View view) {

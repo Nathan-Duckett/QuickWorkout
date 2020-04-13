@@ -1,5 +1,7 @@
 package net.ddns.ndap.quickworkout.model;
 
+import java.util.Objects;
+
 /**
  * Workout represents a possible workout action. This contains a time you should be
  * expected to work on this exercise, a name, a picture to reference the workout and
@@ -98,5 +100,21 @@ public class Workout {
      */
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Workout workout = (Workout) o;
+        return time == workout.time &&
+                name.equals(workout.name) &&
+                Objects.equals(description, workout.description) &&
+                Objects.equals(imagePath, workout.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, time, description, imagePath);
     }
 }
